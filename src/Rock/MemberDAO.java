@@ -74,7 +74,7 @@ public class MemberDAO {
 				}else {
 					File newFile = new File(folder, file.getName());
 					System.out.println(newFile.createNewFile() == true ? "파일이 생성됨" : "뭔가 오류가 있음.");
-				}
+				}else if(file.exists())
 			}catch (Exception e) {
 				// TODO: handle exception
 			}
