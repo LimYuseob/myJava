@@ -14,21 +14,18 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 
-
 public class MemberDAO {
 
 	
 	private MemberDTO memDT;
-	private String id;
-	private String pw;
-	private static String fName = "members";
-	private static File folder = new File(fName);
-	FileWriter fw;
-	BufferedWriter bw;
-	FileReader fr;
-	BufferedReader br;
-	
-
+	private String id = null;
+	private String fName = "members";
+	private File folder = new File(fName);
+	private File newFile = null;
+	FileWriter fw = null;
+	BufferedWriter bw = null;
+	FileReader fr = null;
+	BufferedReader br = null;
 
 
 	public MemberDAO() {
@@ -61,16 +58,9 @@ public class MemberDAO {
 				JOptionPane.showMessageDialog(null, "ID에 반드시 숫자를 넣어 입력하여 주세요.");
 				Crmem();
 			}
-				CrmeP();
+				fileCr();
 	}//End of Crmem()
-	public void CrmeP() {
-		memDT.setPW(JOptionPane.showInputDialog("Password를 입력 하여 주십시요"));
-		if(((memDT).getPW()).isEmpty()) {
-			JOptionPane.showMessageDialog(null, "공백을 빼고 입력하여 주세요");
-			CrmeP();
-		 }
-		fileCr();
-	}//End of CrmeP()
+	
 	
 	public void fileCr() {
 		
@@ -84,51 +74,63 @@ public class MemberDAO {
 						try {
 							if (newFile.createNewFile())
 								System.out.println("파일 생성 성공");
-							Date nowDate = new Date();
-							SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd apm HH:mm:dd");
-							String strnowDate = simpleDate.format(nowDate);
-							fw = new FileWriter(newFile);
-							bw = new BufferedWriter(fw);
-							bw.write("ID : " + id + "\n");
-							bw.write("Password : " + pw);
-							bw.write("생성일자 : " + strnowDate);
-							bw.close();
-							else
-								System.out.println("파일 생성 실패");
+							
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					} else {	// 파일이 존재한다면
-						JOptionPane.showMessageDialog(null, "파일이 이미 존재합니다.");
+						}else {
+							JOptionPane.showMessageDialog(null, "중복된 ID입니다. 다시입력 바랍니다.");
+							Crmem();
+						}
+								
+							try {
+								fw = new FileWriter(newFile);
+								bw = new BufferedWriter(fw);
+								fr = new FileReader(newFile);
+								br = new BufferedReader(fr);
+								Date date_now = new Date(System.currentTimeMillis());
+								SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
+								if(br.readLine() == null) {
+								
+								bw.write("최초 회원 가입일 : " + new_date.format(date_now) + "\n");
+								bw.write("ID : " + id + "\n");
+								bw.flush();
+								}
+							}catch (Exception e) {
+								System.out.println(e.getMessage());
+							}
+								CrmeP(newFile);
 					}
+	public void CrmeP(File newFile) {
+		this.newFile = newFile;
+		memDT.setPW(JOptionPane.showInputDialog("Password를 입력 하여 주십시요"));
+		if(((memDT).getPW()).isEmpty()) {
+			JOptionPane.showMessageDialog(null, "공백을 빼고 입력하여 주세요");
+			CrmeP(newFile);
+		 }	
+		try {
+			fw = new FileWriter(newFile, true);
+			bw = new BufferedWriter(fw);
+			fr = new FileReader(newFile);
+			br = new BufferedReader(fr);
+			bw.write("Password : " + memDT.getPW() + "\n");
+			bw.close();
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		System.out.println("회원가입을 진심으로 축하드립니다!");
+		int ques = JOptionPane.showConfirmDialog(null, "로그인을 하시겠습니까?","질문",JOptionPane.YES_NO_CANCEL_OPTION);
+		if(ques == JOptionPane.NO_OPTION || ques == JOptionPane.CANCEL_OPTION) {
+			JOptionPane.showMessageDialog(null, "아쉽군요 다음에 뵙겠습니다.");
+		}else {
+			JOptionPane.showMessageDialog(null, "로그인 창으로 이동합니다.");
+		}
+	}//End of CrmeP()
+					
 			        
-					// 파일 이름 변경: renameTo()
-					File nnewFile = new File(folder, id + ".dat");	// 변경할 이름
-					if (newFile.exists()) {	// 파일이 존재할 때만 이름 변경
-						if(newFile.renameTo(nnewFile))
-							System.out.println("파일 이름 변경 성공");
-						else
-							System.out.println("파일 이름 변경 실패");
-					} else {
-						System.out.println("변경할 파일이 없습니다.");
-					}
-					System.out.println();
-				if(br == null && fw == null) {
-					try {
-						Date nowDate = new Date();
-						SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd apm HH:mm:dd");
-						String strnowDate = simpleDate.format(nowDate);
-						fw = new FileWriter(newFile);
-						bw = new BufferedWriter(fw);
-						bw.write("ID : " + id + "\n");
-						bw.write("Password : " + pw);
-						bw.write("생성일자 : " + strnowDate);
-						bw.close();
-					}catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-				}
-			}
+				
+			
+			
 	
 			
 	  

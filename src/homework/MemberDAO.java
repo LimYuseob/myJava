@@ -63,7 +63,7 @@ public class MemberDAO {
 					bw.close();
 					result = 1;
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					// TODO Auto-generated catch blocnewk
 					System.out.println("사용자 생성 예외 발생함..");
 					System.out.println(e.getMessage());
 				}
