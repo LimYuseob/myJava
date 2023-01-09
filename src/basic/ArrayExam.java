@@ -1,5 +1,7 @@
 package basic;
 
+import lombok.Builder;
+
 public class ArrayExam {
 
 	public static void main(String[] args) {
@@ -64,9 +66,6 @@ public class ArrayExam {
 		
 		String comValue = com[((int)(Math.random()*com.length))];
 		System.out.println(comValue);
-		
-		
-
 	}
 
 }
