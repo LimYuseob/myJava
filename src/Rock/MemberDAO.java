@@ -67,7 +67,7 @@ public class MemberDAO {
 		
 		
 			try {
-				if(!folder.exists()) {
+				if(!folder.exists()) { 
 				//폴더 생성
 				folder.mkdir();
 				System.out.println("폴더가 생성되었습니다.");

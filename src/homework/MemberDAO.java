@@ -23,7 +23,7 @@ public class MemberDAO {
 	private static File root = new File(theParentFolder);;
 	
 	FileWriter fw;
-	BufferedWriter bw;
+	BufferedWriter bw; 
 	FileReader fr;
 	BufferedReader br;
 	
