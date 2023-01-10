@@ -19,7 +19,7 @@ public class MemberDAO {
 	
 	private MemberDTO memDT;
 	private String id = null;
-	private String fName = "members";
+	private String fName = "C:\\members";
 	private File folder = new File(fName);
 	private File newFile = null;
 	FileWriter fw = null;
@@ -69,7 +69,7 @@ public class MemberDAO {
 				//폴더 생성
 					folder.mkdir();
 				}
-				File newFile = new File(folder, id + ".dat");
+				File newFile = new File(folder, id + ".properties");
 				if (!newFile.exists()) {	// 파일이 존재하지 않으면 생성
 						try {
 							if (newFile.createNewFile())
@@ -125,9 +125,10 @@ public class MemberDAO {
 		}else {
 			JOptionPane.showMessageDialog(null, "로그인 창으로 이동합니다.");
 		}
+		
 	}//End of CrmeP()
 					
-			        
+	
 				
 			
 			
@@ -135,8 +136,10 @@ public class MemberDAO {
 			
 	  
 	
-	public static void main(String[] args) {
+	public static void main(String[] args)throws IOException {
 		new MemberDAO().Crmem();
+		
+		
 	}
 }
 
