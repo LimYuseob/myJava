@@ -16,14 +16,14 @@ public class CSocketEx1 {
 
    public static void main(String[] args) {
       try {
-         String ip = "14.42.124.103"; int port = 40001;
+         String ip = "14.42.124.102"; int port = 40001;
          
          Socket socket = new Socket(ip, port);
          
          //연결된 소켓에 스트림을 얻어낸다
          DataInputStream dis = new DataInputStream(socket.getInputStream());
          
-         String msg = "오빠 이클립스 줫댓다니까?";
+         String msg = "자바가 참 재미있어요.";
          //PrintWriter 를 이용해서 데이터 보내기..
          PrintWriter pw = null;
          BufferedWriter bw =null;
