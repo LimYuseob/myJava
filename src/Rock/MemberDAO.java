@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,18 +17,20 @@ import javax.swing.JOptionPane;
 
 
 public class MemberDAO {
-
-
+	
 	private MemberDTO memDT;
-	private String fName = "C:\\members";
+	private static String id;
+	private static String pw;
+	private String fName = "members";
 	private File folder = new File(fName);
-	private File newFile;
+	private File newFile = null;
 	FileWriter fw = null;
 	BufferedWriter bw = null;
 	FileReader fr = null;
 	BufferedReader br = null;
 	
-
+	
+	
 	public MemberDAO() {
 		memDT = new MemberDTO(this);
 		Crmem();
@@ -125,21 +129,53 @@ public class MemberDAO {
 		}
 		
 	}//End of CrmeP()
-					
-	
-				
-			
-			
-	
-			
-	  
-	
-	public static void main(String[] args)throws IOException {
-		new MemberDAO();
 		
+	public void changePass() {
 		
+	
+		String userPass;
+		String newPass;
+		try {
+		FileReader fr = new FileReader("C:\\members\\" + memDT.getID() + ".properties");
+		
+		do {
+			userPass = JOptionPane.showInputDialog("기존 비밀번호를 입력하세요");
+		
+		} while (!userPass.equals(memDT.getPW()));		
+			
+	        File newCFile = new File("C:\\members\\" + memDT.getID() + ".properties");
+	        
+	        
+	        newPass = JOptionPane.showInputDialog("새로운 비밀번호를 입력하세요");
+	        
+	        
+	        
+	        fw = new FileWriter(newCFile);
+	        
+			bw = new BufferedWriter(fw);
+			
+			Date date_now = new Date(System.currentTimeMillis());
+			
+			SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
+						
+			bw.write("최초 회원 가입일 : " + new_date.format(date_now) + "\n");
+			
+			bw.write("ID : " + memDT.getID() + "\n");
+			
+			bw.write("Password : " + newPass + "\n");
+			
+			bw.close(); 
+			
+			
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}            
+
+		}
+	
+	
+	public static void main(String[] args) {
+		new MemberDAO().changePass();
 	}
 }
-
-
-

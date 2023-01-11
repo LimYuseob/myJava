@@ -1,7 +1,6 @@
 package Rock;
 
-
-
+//0111 1819
 
 
 public class MemberDTO{
@@ -9,8 +8,7 @@ public class MemberDTO{
 	private String ID;
 	private String PW;
 	private String email;
-	MemberDAO memDAO;
-	
+	private MemberDAO memDAO;
 
 	public MemberDTO(MemberDAO memDAO) {
 		this.memDAO = memDAO;
@@ -39,5 +37,5 @@ public class MemberDTO{
 	public void setID(String iD) {
 		ID = iD;
 	}
-			
+	
 }
