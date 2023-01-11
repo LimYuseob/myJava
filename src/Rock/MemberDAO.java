@@ -21,7 +21,7 @@ public class MemberDAO {
 	private MemberDTO memDT;
 	private static String id;
 	private static String pw;
-	private String fName = "members";
+	private String fName = "C:\\members";
 	private File folder = new File(fName);
 	private File newFile = null;
 	FileWriter fw = null;
