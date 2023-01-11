@@ -16,39 +16,37 @@ import javax.swing.JOptionPane;
 
 public class MemberDAO {
 
-	
+
 	private MemberDTO memDT;
-	private String id = null;
 	private String fName = "C:\\members";
 	private File folder = new File(fName);
-	private File newFile = null;
+	private File newFile;
 	FileWriter fw = null;
 	BufferedWriter bw = null;
 	FileReader fr = null;
 	BufferedReader br = null;
-
+	
 
 	public MemberDAO() {
 		memDT = new MemberDTO(this);
+		Crmem();
 	}
 	
 	
 	public void Crmem() {
-		memDT.setID(JOptionPane.showInputDialog("Emali을 입력 바랍니다."));
-		if(((memDT).getID()).isEmpty()) {
+		memDT.setEmail(JOptionPane.showInputDialog("Emali을 입력 바랍니다."));
+		if(((memDT).getEmail()).isEmpty()) {
 			JOptionPane.showMessageDialog(null, "공백을 빼고 입력하여 주세요");
 			Crmem();
 		}
-			String sev = ((memDT).getID()).substring(((memDT).getID()).indexOf('@')+1);
-			id = ((memDT).getID()).substring(0,((memDT).getID()).indexOf('@'));
-			JOptionPane.showMessageDialog(null, "입력하신 ID : " +  id + "입니다.\n" + "입력하신 Email : " + id + "@" + sev + "입니다." );
-			char idc = id.charAt(0);
+			JOptionPane.showMessageDialog(null, "입력하신 ID : " +  memDT.getID() + "입니다." );
+			char idc = memDT.getID().charAt(0);
 			Pattern ptt = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])");
-			Matcher mtch = ptt.matcher(id);
+			Matcher mtch = ptt.matcher(memDT.getID());
 			
 			
 			
-		if(id.length() < 8 && id.length() > 12 ) {
+		if(memDT.getID().length() < 8 && memDT.getID().length() > 12 ) {
 				JOptionPane.showMessageDialog(null, "ID를 8~12자리로 입력하여 주세요.");
 				Crmem();
 			}else if(!Character.isUpperCase(idc)) {
@@ -69,7 +67,7 @@ public class MemberDAO {
 				//폴더 생성
 					folder.mkdir();
 				}
-				File newFile = new File(folder, id + ".properties");
+				File newFile = new File(folder, memDT.getID() + ".properties");
 				if (!newFile.exists()) {	// 파일이 존재하지 않으면 생성
 						try {
 							if (newFile.createNewFile())
@@ -93,7 +91,7 @@ public class MemberDAO {
 								if(br.readLine() == null) {
 								
 								bw.write("최초 회원 가입일 : " + new_date.format(date_now) + "\n");
-								bw.write("ID : " + id + "\n");
+								bw.write("ID : " + memDT.getID() + "\n");
 								bw.flush();
 								}
 							}catch (Exception e) {
@@ -137,7 +135,7 @@ public class MemberDAO {
 	  
 	
 	public static void main(String[] args)throws IOException {
-		new MemberDAO().Crmem();
+		new MemberDAO();
 		
 		
 	}
