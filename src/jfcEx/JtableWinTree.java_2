@@ -1,0 +1,374 @@
+package whatsJava.jfc;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Date;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.TitledBorder;
+
+public class JtableWinTree extends JFrame implements ActionListener{
+
+	private Container con;
+	private JLabel title_lb = new JLabel("File Search(파일검색)", JLabel.CENTER);
+	
+	//검색어 입력용 TextField
+	private JTextField search_tf = new JTextField(15);//15자 길이크기
+	
+	//검색 범위를 표현한 ComboBox Item 용 Vector 생성
+	private Vector condition_vc = new Vector();
+	//검색 범위 콤보박스..현재는 비워져있다.
+	private JComboBox condition_jcb = new JComboBox(condition_vc);
+	
+	//콤보박스가 스크롤이 필요한 경우 표시하기 위한 스크롤페인에 콤보박스 add
+	private JScrollPane condition_jsp = new JScrollPane(condition_jcb);
+	
+	
+	private JButton search_bt = new JButton("검색 시작");
+	
+	private JLabel result_lb = new JLabel("RESULTS");
+	
+	private JLabel view_lb = new JLabel();
+	
+	//검색된 파일의 정보를 저장할 Vector 생성
+	private Vector data_vc = new Vector();
+	private Vector field_vc = new Vector();
+	
+	//JTable 은 엑셀처럼 데이터를 그리드 형식으로 저장,관리,표현 해준다. JTableModel 과 같이 사용된다.
+	private JTable view_jt;
+	
+	
+	private JScrollPane view_jsp;
+	
+	private JButton clear_bt = new JButton("Clear");
+	private JButton end_bt = new JButton("END");
+	private JPanel jpjp;
+	
+	public JtableWinTree() {
+		super("자바 탐색기");
+		this.init();
+		this.start();
+		this.setSize(700, 500);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension frm = this.getSize();
+		
+		int x = (int)(screen.getWidth()/2 - frm.getWidth()/2);
+		int y = (int)(screen.getHeight()/2 - frm.getHeight()/2);
+		this.setLocation(x, y);
+		this.setVisible(true);
+	}
+	private void init() {
+		//프레임 바닥,,,제일 아래에 있는 컨테이너 생성..하위에 생성되는 컴포넌트를 포함한 컨테이너를 나중에 모두 add 시킨다.
+		con = this.getContentPane();
+		
+		//보더레이아웃 배치 설정.
+		con.setLayout(new BorderLayout(10, 10));
+		
+		//파일 검색 Label 을 담는 JPanel 생성. 1Row 의 보더레이아웃으로 생성한다.
+		JPanel jp = new JPanel(new BorderLayout());
+		title_lb.setFont(new Font("Sans-Serif",Font.BOLD, 14));
+		//파일 검색 라벨을 북쪽에 add 한다.
+		jp.add("North", title_lb);
+		jp.setBackground(Color.cyan);
+		
+		//위 파일검색 컨테이너의 add 될 컨테이너로 사용될 JPanel 사용 및 배치 관리자로 Border 레이아웃생성(3행 1열)
+		JPanel jp1 = new JPanel(new GridLayout(3, 1));
+		//아래는 보더의 모양을 구성하도록 하는 객체 사용함.
+		jp1.setBorder(new BevelBorder(BevelBorder.RAISED));
+		//JPanel 의 바탕색을 화이트로.
+		jp1.setBackground(Color.YELLOW);
+		
+		//파일 검색 컨테이너를 위한 JPanel 
+		JPanel jp2 = new JPanel(new BorderLayout());
+		jp2.setBorder(new TitledBorder("파일검색"));//JPanel 제목을 주고 Panel 경계에 보더라인을 설정한다..잘 보면 보더라인이 보일것임..
+		jp2.setBackground(Color.green);
+		
+		//검색조건을 담기위한 JPanel
+		JPanel jp3 = new JPanel(new GridLayout(2,1));
+		search_tf.setBorder(new TitledBorder("검색조건"));
+		//JPanel에 검색조건 input 가능한 TextField ㅁdd 
+		jp3.add(search_tf);
+		
+		//검색범위 Panel 에도 보더라인을 설정한다.
+		condition_jsp.setBorder(new TitledBorder("검색범위"));
+		
+		
+		//검색조건 배치관리자인 그리드의 2번째 행에 검색범위 panel add 한다.
+		jp3.add(condition_jsp);
+		//파일검색 컨테이너의 중앙에 검색범위 컨테이너를 add 한다.
+		jp2.add("Center", jp3);
+		
+		
+		//판넬 컨테이너 구성
+		JPanel jp4 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		//검색시작 버튼을 add
+		jp4.add(search_bt);
+		
+		//검색조건 컨테이너에 검색시작 컨테이너를 남쪽에 위치한ㄷ.
+		jp2.add("South", jp4);
+		
+		//파일검색 컨테이너(green 컬러)에 검색조건 컨테이너를 부착한다.
+		jp1.add(jp2);
+		
+		//jp1.add(new JLabel());
+		//jp1.add(new JLabel());
+		
+		//파일검색 Panel(Cyan color)에 위 구성된 파일검색 container 를 중앙 add 한다.
+		jp.add("Center", jp1);
+		//사이지 조정..150 * 500
+		jp.setPreferredSize(new Dimension(150, 500));
+		//맨 바닥(JFrame 컨테이너의 서쪽에 파일검색 컴포넌트들이 구성된 JPanel 을 add 한다..
+		con.add("West", jp);
+		
+		
+		
+		jpjp = new JPanel(new BorderLayout(10,10));
+		
+		//검색 결과 컴포넌트용 JPanel 생성.
+		JPanel jpjp1 = new JPanel(new BorderLayout(5, 5));
+		
+		//서쪽 영역으로 RESULT Label 배치
+		result_lb.setFont(new Font("Sans-Serif",Font.BOLD,14));
+		jpjp1.add("West", result_lb);
+		
+		
+		//검색 중인 파일을 표현할 Label 객체의 보더를 설정한다.
+		view_lb.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		
+		//컨테이너 크기 재설정.
+		jpjp1.setPreferredSize(new Dimension(550, 50));
+		
+		
+		//RESULT 및 파일검색 내용을 표시할 Label 을 담는 컨테이너 생성(Orange Color)
+		JPanel jpjpjp = new JPanel(new BorderLayout());
+		jpjpjp.setBackground(Color.orange);
+		//가운데 검색중인 파일 표시 Label 배치
+		jpjpjp.add("Center",view_lb);
+		
+		//바닥 컨테이너에 jpjpjp 컨테이너 add
+		jpjp1.add("Center", jpjpjp);
+		//제일 바닥 컨테이너에 위 컨테이너 add
+		jpjp.add("North", jpjp1);
+		
+		//JTable 의 컬럼명으로 사용될 Vector 에 컬럼명 세팅
+		field_vc.add("파일명");
+		field_vc.add("파일경로");
+		field_vc.add("파일크기");
+		field_vc.add("최종수정일");
+		field_vc.add("파일종류");
+		
+		//JTable 생성..초기 값은 없음.
+		view_jt = new JTable(data_vc, field_vc);
+		
+		//스크롤생성
+		view_jsp = new JScrollPane(view_jt);
+		
+		//파일 검색용 영영의 중앙에 JTable 컨테이너 배치
+		jpjp.add("Center", view_jsp);
+		
+		//하단의 clear, end 버튼 add 할 컨테이너 생성.
+		JPanel jpjp2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		jpjp2.add(clear_bt);
+		jpjp2.add(end_bt);
+		
+		//위 컨테이너를 남쪽방위에 add
+		jpjp.add("South",jpjp2);
+		
+		//JFram 작업공간에 검색 컴포넌트(컨테이너) add
+		con.add("Center", jpjp);
+		
+		//Root Drive 검색..C:\\, D:\\(시스템마다 틀림)
+		File[] root = File.listRoots();
+		//콤보박스의 아이템 추가
+		condition_vc.add("전체범위");
+		//콤보박스의 아이템 추가(드라이브 명)
+		for(int i = 0; i<root.length; i++) {
+			condition_vc.add(root[i].toString());
+		}
+		//추가된 콤보박스의 내용을 갱신 하기 위해 아래의 메서드 호출(반드시 해야함)
+		condition_jcb.updateUI();
+		
+	}
+	private void start() {
+		//이벤트 등록
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		search_bt.addActionListener(this);
+		search_tf.addActionListener(this);
+		clear_bt.addActionListener(this);
+		end_bt.addActionListener(this);
+	}
+	public static void main(String[] args) {
+		try {
+			//OS 에 무관하게 같은 모양으로 보여주도록 객체의 메서드 호출..그냥 쓰면됨
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		new JtableWinTree();
+
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == search_tf || e.getSource() == search_bt) {
+			String data = search_tf.getText();
+			if(data == null || data.trim().length() == 0) {
+				return;
+			}
+			data = data.trim();
+			int condition = 0;
+			char ch = data.charAt(0);
+			if(ch == '*') {
+				condition =1;
+			}
+			
+			//검색문자의 끝이 * 라면...
+			char ch1 = data.charAt(data.length() -1);
+			if(ch1 == '*') {
+				condition = 2;
+			}
+			//시작과 끝이 * 라면...
+			if(ch == '*' && ch1 == '*') {
+				condition = 3;
+			}
+			
+			String str = (String)condition_jcb.getSelectedItem();//검색범위 설정 값 찾기
+			
+			if(str.trim().equals("전체범위")) {
+				File[] root= File.listRoots();
+				for(int i = 1; i<root.length; i++) {
+					new MyThread(root[i].toString(), data, condition);
+				}
+			}else {
+				new MyThread(str.trim(), data, condition);
+			}
+		}else if(e.getSource() == clear_bt) {
+			data_vc.clear();
+			jpjp.remove(view_jsp);
+			view_jt = new JTable(data_vc, field_vc);
+			view_jsp = new JScrollPane(view_jt);
+			jpjp.add("Center", view_jsp);
+			jpjp.validate();
+		}else if(e.getSource() == end_bt) {
+			System.exit(0);
+		}
+	}
+	
+	private void updateTable(Vector imsi) {
+		data_vc.add(imsi);
+		jpjp.remove(view_jsp);//기존 내용(Jtable)을 담고 있는 ScrollPane 삭제..이유는 검색 한 파일의 정보를 JTable 에 넣었으니 다시 생성해야함. 
+		view_jt = new JTable(data_vc, field_vc);
+		view_jsp = new JScrollPane(view_jt);
+		jpjp.add("Center",view_jsp);
+		//아래의 메서드는 컨테이너의 배치관리자나, 컴포넌트가 재배치 또는 컴포넌트가 새롭게 추가되거나 할때 호출해줘야 갱신된 내용을 다시 보여주기 때문이다.
+		jpjp.validate();
+	}
+	
+	
+	class MyThread1 extends Thread{
+		private String path;
+		
+		public MyThread1(String path) {
+			this.path = path;
+			this.start();
+		}
+		@Override
+		public void run() {
+			view_lb.setText(path);
+		}
+	}
+	
+	class MyThread extends Thread{
+		private String path;
+		private String data;
+		private int condition;
+		
+		public MyThread(String path, String data, int condition) {
+			this.path = path;
+			this.data = data;
+			this.condition = condition;
+			this.start();
+		}
+		@Override
+		public void run() {
+			this.searchDirectory();
+		}
+		
+		private void searchDirectory() {
+			File[] files = new File(path).listFiles();
+			if(files == null)
+				return;
+			
+			for(int i = 0; i<files.length; i++) {
+				new MyThread1(files[i].getPath());
+				if(condition == 0) {
+					if(files[i].getName().equals(data)) {
+						Vector imsi = new Vector();
+						imsi.add(files[i].getName());
+						imsi.add(files[i].getParent());
+						imsi.add(String.valueOf(files[i].length()));
+						imsi.add(new Date(files[i].lastModified()).toString());
+						imsi.add(files[i].isDirectory() ?"폴더":"파일");
+						updateTable(imsi);
+					}
+				}else if(condition == 1) {
+					if(files[i].getName().endsWith(data.substring(1))) {
+						Vector imsi = new Vector();
+						imsi.add(files[i].getName());
+						imsi.add(files[i].getParent());
+						imsi.add(String.valueOf(files[i].length()));
+						imsi.add(new Date(files[i].lastModified()).toString());
+						imsi.add(files[i].isDirectory() ?"폴더":"파일");
+						updateTable(imsi);
+					}
+				}else if(condition == 2) {
+					if(files[i].getName().startsWith(data.substring(0,data.trim().length()-1))) {
+						Vector imsi = new Vector();
+						imsi.add(files[i].getName());
+						imsi.add(files[i].getParent());
+						imsi.add(String.valueOf(files[i].length()));
+						imsi.add(new Date(files[i].lastModified()).toString());
+						imsi.add(files[i].isDirectory() ?"폴더":"파일");
+						updateTable(imsi);
+					}
+				}else if(condition == 3) {
+					if(files[i].getName().indexOf(data.substring(1, data.trim().length() -1)) != -1) {
+						Vector imsi = new Vector();
+						imsi.add(files[i].getName());
+						imsi.add(files[i].getParent());
+						imsi.add(String.valueOf(files[i].length()));
+						imsi.add(new Date(files[i].lastModified()).toString());
+						imsi.add(files[i].isDirectory() ?"폴더":"파일");
+						updateTable(imsi);
+					}
+				}
+			}
+			for(int i = 0; i<files.length; i++) {
+				if(files[i].isDirectory()) {
+					new MyThread(path + File.separator + files[i].getName(), data, condition);
+				}
+			}
+			
+		}
+	}
+	
+	
+}

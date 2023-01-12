@@ -1,0 +1,19 @@
+C:\\oraclhome(폴더 만든다)
+Setup.exe (관리자 권한으로 실행)
+경로를 orahome 으로 지정
+데이터베이스 비밀번호 입력 (<중요>비밀번호는 다시 찾을수 없기때문에 쉬운걸로 하거나 다른곳에 꼭 저장해둘것!!<중요>)
+설치.....
+설치완료후 Win Key + x --> Window powerShell(관리자) 오픈 -->
+lsnrctl status 엔터
+검색에서 SQL Plus 실행
+sqlplus / as sysdba 치고 비밀번호 입력
+Select * from tab; --> 입력하세요...조회가 되면 일단 성공입니다.
+create user c##yuseob(ID) identified by 1234(password);
+grant connect to c##yuseob; <-- 권한획득
+최고권한을 yuseob(계정) 에 부여하는 SQL 문입니다.
+--> Grant Resource, DBA, Connect to c##yuseob;
+conn c##yuseob; --> password 입력
+sqldeveloper oracle.com에서 다운로드후 C: 압축풀기
+sqldeveloper.exe 바탕화면에 보내기
+sqldeveloper 실행
+sqldeveloper 좌측 + 버튼 눌러서 실행후 이름 아이디 비밀번호 생성

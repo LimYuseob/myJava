@@ -8,12 +8,11 @@ public class MemberDTO{
 	private String ID;
 	private String PW;
 	private String email;
-	private MemberDAO memDAO;
 
-	public MemberDTO(MemberDAO memDAO) {
-		this.memDAO = memDAO;
+	public MemberDTO() {
 	}
 	
+
 	public String getEmail() {
 		return email;
 	}

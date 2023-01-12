@@ -6,33 +6,32 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
 
-public class MemberDAO {
+
+
+public class MemberDAO{
 	
-	private MemberDTO memDT;
 	private static String id;
 	private static String pw;
+	private MemberDTO memDT;
 	private String fName = "C:\\members";
 	private File folder = new File(fName);
-	private File newFile = null;
+	private File newFile;
 	FileWriter fw = null;
 	BufferedWriter bw = null;
 	FileReader fr = null;
 	BufferedReader br = null;
 	
 	
-	
 	public MemberDAO() {
-		memDT = new MemberDTO(this);
+		memDT = new MemberDTO();
 		Crmem();
 	}
 	
@@ -126,6 +125,7 @@ public class MemberDAO {
 			JOptionPane.showMessageDialog(null, "아쉽군요 다음에 뵙겠습니다.");
 		}else {
 			JOptionPane.showMessageDialog(null, "로그인 창으로 이동합니다.");
+			ito.first();
 		}
 		
 	}//End of CrmeP()
@@ -176,6 +176,6 @@ public class MemberDAO {
 	
 	
 	public static void main(String[] args) {
-		new MemberDAO().changePass();
+		new MemberDAO();
 	}
 }

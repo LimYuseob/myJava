@@ -6,9 +6,6 @@ public class forTest {
 		// TODO Auto-generated method stub
 		System.out.println("이제 된거냐?!!!!!");
 		System.out.println("으아 힘들다 20:24");
-		System.out.println("20230105  1709");
-		System.out.println("20230105  1709");
-		System.out.println("20230105  1714");
-		System.out.println("20230105  1716");
+		System.out.println("01071602");
 	}
 }
