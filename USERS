@@ -1,0 +1,9 @@
+select * from USERS;
+
+select count(userid) from USERS where userid = 'dladbtjq@naver.com'
+
+select userpassword from USERS where userid = 'dladbtjq@naver.com'
+
+update users
+
+Set reg_date = sysdate;
