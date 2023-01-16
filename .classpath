@@ -12,5 +12,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/json-20220924.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/ojdbc11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

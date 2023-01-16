@@ -178,4 +178,10 @@ public class MemberDAO{
 	public static void main(String[] args) {
 		new MemberDAO();
 	}
+
+
+	public static MemberDAO getInstance() {
+		// TODO 자동 생성된 메소드 스텁
+		return null;
+	}
 }
