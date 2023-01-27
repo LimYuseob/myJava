@@ -23,7 +23,7 @@ public class ModelDAO {
 	private static final String dbSchema;//초기화 2번
 	
 	static {//초기화 1번
-		account = "c##yuseob";
+		account = "yuseob";
 		accPass = "1234";
 		dbSchema = "jdbc:oracle:thin:@localhost:1521/xe";
 	}
